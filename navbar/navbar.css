@@ -1,0 +1,63 @@
+/* Interesting bits */
+
+nav {
+  background-color: rebeccapurple;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  flex-wrap: wrap;
+  /*
+  Probably switching to an alternative layout is better,
+  but this is an okay fallback.
+  */
+
+  padding: 1em;
+  max-width: 100vw;
+}
+
+nav div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav div * {
+  margin: 1em;
+  /*
+    Space each flex item out by 1em.
+    Otherwise, the flex items jam up against one another.
+  */
+}
+
+/* Less interesting bits */
+
+body {
+  background-color: blanchedalmond;
+  font-family: Helvetica;
+  margin: 0;
+  padding: 0;
+}
+
+body * {
+  margin: 0;
+}
+
+main {
+  margin: 2em;
+}
+
+nav h1 {
+  font-size: 48px;
+  padding: 0;
+  margin: 0;
+}
+
+nav p {
+  font-weight: bold;
+  color: blanchedalmond;
+}
+
+nav a {
+  color: blanchedalmond;
+}
