@@ -1,0 +1,16 @@
+body {
+  background-color: blanchedalmond;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+}
+
+article {
+  background-color: aliceblue;
+  max-width: 50em;
+  box-shadow: 2px 2px 8px #222;
+  padding: 6em;
+}

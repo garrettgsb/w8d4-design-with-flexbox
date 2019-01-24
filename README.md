@@ -1,3 +1,28 @@
+# TL;DR:
+
+## Flex Mechanics
+
+* `display: flex`
+* `flex-direction: row/column` Defaults to `row`
+* `justify-content: flex-start | flex-end | stretch | space-around | space-between | space-evenly` (And some other stuff) Defaults to `flex-start`
+* `align-items` Similar to `justify-content`, but also with `baseline`. Defaults to `stretch`
+* `flex-wrap: wrap` Defaults to `no-wrap`
+* `flex-grow` and `flex-shrink` are too complex to TL;DR
+
+## Designing with Flexbox
+
+### Everything is a box
+
+Everything is a box. Boxes in boxes.
+
+### Design Steps
+
+* Define the content
+* Design the layout natively
+* Consider the dynamic behavior of the layout
+* Design the layout hierarchy
+* Establish tolerances and fallbacks
+
 # The Mechanics of Flexbox
 
 ## Key Terminology
@@ -18,13 +43,13 @@
 
 HTML was originally developed to write text documents, not to create complex user interfaces. Tools were developed for creating headings, bulleted lists, and the occasional image. They were not developed (initially) to create product cards, modals, and messaging windows.
 
-For interspersing images (and other box-shaped things) beside heaps of text, floats were a perfectly okay solution. Unfortunately, they were also the _only_ answer to the question "How do I put a thing beside another thing?"
+For interspersing images (and other box-shaped things) next to heaps of text, floats were a perfectly okay solution. Unfortunately, they were the _only_ answer to the question "How do I put a thing beside another thing?"
 
 So when we want a row of elements, which is a perfectly reasonable thing to want, we learn that floats are awful for arranging box-shaped things:
 
 * Parent elements collapse at random, perhaps never to be seen again
 * Block elements are accidentally swept away by a reckless float section
-* Phantom elements, neither living or dead, exist only to push other elements around
+* Phantom elements, neither living nor dead, are summoned just to bully other elements into position
 * The spectres of absolutely positioned elements haunt not only their own container, but doom their neighbors as well
 * Width attributes are hard-coded dozens of times, using esoteric percentages and decimal points, as any attempt to pursue a responsive layout spirals into a master class on wild redundancy
 * Markup becomes a Lovecraftian jungle that eschews even the faintest whisper of semantic meaning
@@ -37,7 +62,7 @@ Doing layouts with floats is the worst.
 
 ## Flexbox: A Row Of Things Which Is Not Haunted
 
-Flexbox is the sanity-restoring solution to the layout problem. It gives straightforward answers to questions such as:
+Flexbox is one of today's sanity-restoring solutions to the layout problem. It gives straightforward answers to questions such as:
 
 * "How do I do a multi-column layout?"
 * "How do I do an image gallery?"
@@ -93,9 +118,13 @@ display: flex;
 flex-direction: column;
 ```
 
-This attribute sets the main axis (and, implicitly, the cross axis). Everything else follows the same principles. You also have access to `flex-direction: row-reverse` and `flex-direction: column-reverse`, if you want your content to go in the opposite order of the markup, for some reason.
+The `flex-direction` attribute sets the direction of the main axis (and, implicitly, the cross axis). Practically, and most obviously, `flex-direction: row` makes flex items line up horizontally, and `flex-direction: column` makes them line up vertically.
 
-Setting this attribute is a very straightforward way to reorient the flow of a page. When simply wrapping the items does not work for a mobile layout, a media query can be used to tell the whole flexbox to orient vertically:
+**Best Practice:** Only set the `flex-direction` if you need to override the existing behavior. Flexboxes default to `row` as the flex direction, so if that's what you want (and nothing else is affecting it), leave the `flex-direction` property out.
+
+You also have access to `flex-direction: row-reverse` and `flex-direction: column-reverse`, if you want your content to go in the opposite order of the markup, for some reason.
+
+Setting this attribute is a very straightforward way to reorient the flow of a page. Sometimes, a responsive layout is as easy as creating a media query to tell a flexbox to change orientation:
 
 ```
 section {
@@ -114,14 +143,16 @@ section {
 
 ## **Justify:** How items arrange on the main axis
 
-We can choose how our content stacks up on the main axis with the `justify-content` property. We don't refer to 'left,' 'right,' 'up,' or 'down' here-- Everything is in reference to where the flexbox starts and ends.
+We can choose how our content stacks up on the main axis with the `justify-content` property. We don't refer to 'left,' 'right,' 'up,' or 'down' here*-- Everything is in reference to where the flexbox starts and ends.
+
+_*(You can... But don't)._
 
 Usually, `flex-start` is the left or top of the flex container, but that's inverted if you're using `flex-direction: row-reverse` or `flex-direction: column-reverse`.
 
 | Value | Effect |
 | ----- | ------ |
 | `flex-start` | **Default.** Smoosh everything to the start of the flex container (usually the left or the top) |
-| `flex-end` | Smoosh everything to the end of the flex container |
+| `flex-end` | Smoosh everything to the end of the flex container (usually the right or bottom) |
 | `center` | Smoosh everything in the center of the flex container |
 | `space-around` | Distribute items evenly. Items have a half-size space on either end. |
 | `space-between` | Distribute items evenly. The first item is flush with the start, the last is flush with the end. |
@@ -156,7 +187,7 @@ section > .iconoclast {
 
 By default, flex items in a container will just squish and squish until they look like Pocky.
 
-To prevent that behavior, we can tell the Flexbox "Hey, when you run out of space, don't shrink the element-- Just put it on another row." Or, put another way, **allow flex items to wrap.**
+To prevent that behavior, we can tell the Flexbox "Hey, when you run out of space, don't shrink the element or just spill out of the end-- Just put it on another row." Or, put another way, **allow flex items to wrap.**
 
 ```
 display: flex;
@@ -165,13 +196,37 @@ flex-wrap: wrap;
 
 Just like that, your flexbox layout is responsive.
 
-Note that unlike the way that floats handle wrapping (which is, unsurprisingly, confusing and awful), wrapping flex containers will put wrapped elements on their own row. Don't overthink this-- Again, Flexbox just does the sensible thing here.
+Note that unlike the way that floats handle wrapping (which is, unsurprisingly, confusing and awful), wrapping flex containers will put wrapped elements on their own row. Don't overthink this-- Flexbox just does the sensible thing here.
 
 Speaking of sensible, you can set the `flex-wrap` property to `wrap-reverse`, for some reason. If you do that, wrapped items will appear _before_ their preceding elements, which is perhaps an interesting party trick.
 
+## **Flex Grow/Shrink:** An Antidote to Percentage Math
+
+https://garrettgsb.github.io/w8d4-design-with-flexbox/grow-shrink/grow-shrink.html
+
+With traditional layout patterns, you find yourself having feverish conversations, sometimes with rubber ducks, about how many columns this or that layout is meant to take up, and calculating percentage widths with six, seven, even eight digits after the decimal.
+
+The `flex-grow` and `flex-shrink` properties work somewhat differently, but both help you program **dynamic layouts** that are not tied to **yucky percentage math**.
+
+**NOTE:** Layouts become more complex when you introduce grow and shrink. Many, many layouts can be created without reaching for these properties. Consider carefully any time you have an idea that increases the complexity of your layout.
+
+### Flex Grow
+
+When flex items stretch to fill their container, the `flex-grow` property determines the proportion by which they gain space.
+
+* `flex-grow: 0` - Don't grow at all
+* `flex-grow: 1` - Grow at the same rate as everything else that's set to 1
+* `flex-grow: 5` - Grow 5 times as fast as everything that's set to 1
+
+### Flex Shrink
+
+The `flex-shrink` property sounds like just the inverse of `flex-grow`, but its behavior is actually quite different: **When elements are being squished, `flex-shrink` establishes the order in which they cede space.** The higher the number, the more willing the element is to shrink (and the other elements with lower `flex-shrink` values will watch it coolly, themselves not budging until they must). Elements with matching `flex-shrink` values will shrink at the same time, at the same rate.
+
+This is useful when used in conjunction with a `min-width`: The highest-value `flex-shrink` element will shrink until it hits its `min-width`, and then the second-highest will begin to shrink, and so forth.
+
 # Designing With Flexbox
 
-Now that we are comfortable (or at least familiar) with the simple and expressive language of Flexbox, we are ready to learn how to approach designing sophisticated layouts with it.
+Now that we are comfortable (or at least familiar) with the simple and expressive language of Flexbox, we are ready to learn how to approach the design of sophisticated layouts.
 
 ## Philosophy of Design
 
@@ -181,7 +236,7 @@ Everything is a box.
 
 Everything is a box.
 
-In Flexbox, we view everything as **boxes nested in boxes.** Text node? Box. Image? Box. Section, body, div, video, ordered list, unordered list, list item, heading? Box. **Everything is a box.**
+In Flexbox, we view everything as **boxes nested in boxes.** Text node? Box. Image? Box. Section, body, div, video, ordered list, unordered list, list item, heading? Box. **Everything is boxes in boxes.**
 
 ![Boxes](readme-images/boxes.jpg)
 
@@ -191,15 +246,15 @@ In Flexbox, we view everything as **boxes nested in boxes.** Text node? Box. Ima
 At each level of the hierarchy, and possibly again for each branch, a decision is made about whether that level of the hierarchy is a **row or a column**. There is a tendency for subsequent levels to **alternate between rows and columns,** but that is not always the case.
 
 * **Everything is a box**
-* **Every box that has children has a direction**
+* **Every box that has children has a `flex-direction`**
 
 ### Markup should be semantic
 
-HTML is designed to be written in a semantic way-- that is, the abstract hierarchy of the **information** and the implemented hierarchy of the **markup** should map well to one another.
+HTML is designed to be written in a semantic way-- that is, the abstract hierarchy of the **information** and the implemented hierarchy of the **markup** should map closely to one another.
 
 With floats, clears, breaks, rows, and an endless parade of faceless divs, that ideal is largely unrealistic. With Flexbox, however, we can bring our markup back under control, and map it well to our data:
 
-**Data**
+**Data** (JSON or something)
 ```
 {
   boops: [
@@ -208,36 +263,42 @@ With floats, clears, breaks, rows, and an endless parade of faceless divs, that 
       author: "Homestar Runner",
       handle: "@homestar",
       content: "We are just talkin' about Bubs with a piece of paper stapled to his face, right?",
-    }
-  ]
+    },
+  ],
 }
 ```
 
 **Markup**
 ```
-<section class="a-single-boop">
-  <header>
-    <img src="homestar.jpg">
-    <h1 class="name">Homestar Runner</h1>
-    <h2 class="handle">@homestar</h2>
-  </header>
-  <main>
-    <p>We are just talkin' about Bubs with a piece of paper stapled to his face, right?</p>
-  </main>
+<section class="boops">
+  <article class="a-single-boop">
+    <header>
+      <img src="homestar.jpg">
+      <h1 class="name">Homestar Runner</h1>
+      <h2 class="handle">@homestar</h2>
+    </header>
+    <main>
+      <p>We are just talkin' about Bubs with a piece of paper stapled to his face, right?</p>
+    </main>
+  </article>
 </section>
 ```
 
-Writing our markup in this way makes it clean and easy to style... Not to mention making it easier to dynamically generate this content from database data.
+Writing our markup in this way is clean. Each tag is meaningful, and is a natural extension of the source data. With Flexbox, this type of markup is also easy to style.
 
 ## Case Studies
 
 ### Centered Max Width Content Area
 
+https://garrettgsb.github.io/w8d4-design-with-flexbox/centered-max-width.html
+
 If you routinely look at web pages on a large monitor, you may have noticed that most pages constrain their content area to a certain maximum size-- It doesn't just keep stretching and stretching ad infinitum. Reddit, for example, constrains the content area to a certain max width and centers it on the page:
 
 ![Centered Max Width](readme-images/centered-max-width.png)
 
-We can achieve this with Flexbox, by setting our outermost container in this way:
+Trying this the old-fashioned way, it doesn't take too much to get the correct width... But getting it to center on the screen is a challenge. The solution (involving the esoteric behavior of margins) is arcane and annoying: It feels like a hack, plus, now you can't use that `margin` value for anything!
+
+But this layout is easily achieved with Flexbox: A single column, with its contents centered in the page. The outermost container can be set in this way:
 
 ```
 main {
@@ -247,17 +308,19 @@ main {
 }
 ```
 
-We probably also want some value for `max-width`, to make sure that the content does not sprawl horizontally on crazy-wide screens.
+We probably also want some reasonable value for `max-width`, to make sure that the content does not sprawl horizontally on crazy-wide screens.
 
 
 
 ### Navbar
 
-Suppose you want to style a navbar. A common scenario is that you want everything stacked up against the left edge of the screen, except for one thing on the right-- A search bar, a hamburger icon, something like that.
+https://garrettgsb.github.io/w8d4-design-with-flexbox/navbar/navbar.html
+
+Suppose you want to style a navbar. A common scenario is that you want everything stacked up against the left edge of the screen, except for one thing on the right: A search bar, a hamburger icon, something like that.
 
 **Step 1: Define the content**
 
-Before we talk about layout, let's determine what our content is. On a typical navbar, we expect to see:
+Before we talk about layout, let's determine what our content is. On a typical navbar, we might expect to see:
 
 * A logo
 * Some title text (usually the company name, or some slogan)
@@ -269,7 +332,7 @@ Before we talk about layout, let's determine what our content is. On a typical n
   - Contact
 * A search bar
 
-Once we have our content, we may even write up some markup to represent it:
+Once we have our content, we may even write some markup to represent it:
 
 ```
 <nav>
@@ -286,7 +349,7 @@ Once we have our content, we may even write up some markup to represent it:
 
 **Step 2: Design the layout naively**
 
-Using your favorite design tool (whiteboard for me), draw the layout you want, without considering too much about the implementation. Just get it out there.
+Using your favorite design tool (mine is a whiteboard), draw the layout you want, without considering too much about the implementation. Just get it out there.
 
 ![Navbar - Naive design](readme-images/navbar-naive.jpg)
 
@@ -294,18 +357,22 @@ If you work with a designer, then it is likely that you will have no shortage of
 
 **Step 3: Consider the dynamic behavior of the design**
 
-It's odd to think of a layout as having "behavior," but it absolutely does: A layout responds to the content and the context that it finds itself with. Instead of (or occasionally, in addition to) thinking in terms of pixel widths and column ratios, Flexbox allows us to think in terms of behaviors.
+It's odd to think of a layout as having "behavior," but it absolutely does: A layout responds to the **content** and the **context** that it finds itself with. Instead of (or occasionally, in addition to) thinking in terms of pixel widths and column ratios, Flexbox allows us to think in terms of behaviors.
 
 Most commonly, the behaviors that we want to look at are "How should items inside of this box justify and align themselves?"
 
-Other questions that we might ask about dynamic behavior is "What should flex items do if they exceed their container?" (Wrap, overflow), and "When should these elements switch to a different layout strategy?" (Media queries).
+Other questions that we might ask about dynamic behavior are:
+* What should flex items do if they exceed their container? (Wrap, overflow)
+* What should be done with extra space? (`flex-grow`)
+* What should be done when space is constrained? (`flex-shrink`)
+* When should these elements switch to a different layout strategy? (Media queries)
 
 Here is how we might describe the dynamic behavior of this navbar in Flexbox terminology:
 
 * The navbar contains two boxes, pushed as far apart as they can go (i.e. with as much `space-between` them as possible)
 * The left box (or: the first flex item) is itself a flexbox, which contains the logo, page title, and menu items.
 * The right box (or: second flex item) is just the search bar; It might just be a single `input` element.
-* All items align along the center axis
+* All items align (vertically) along the centerline
 
 **Step 4: Design the layout hierarchy**
 
@@ -320,7 +387,7 @@ The layout hierarchy here is actually quite simple:
     * Box 1: 7 items in a neat row
     * Box 2: 1 item
 
-All we've needed to do to our markup is add one layer of layout to facilitate the spacing behavior that we want:
+All we've needed to do to our markup is add one layer of markup for layout to facilitate the spacing behavior that we want:
 
 ```
 <nav>
@@ -337,7 +404,7 @@ All we've needed to do to our markup is add one layer of layout to facilitate th
 </nav>
 ```
 
-Now, we need only to tell the Flexboxes how to behave with a few motes of CSS:
+Now, we need only to tell the two Flexboxes how to behave with a few motes of CSS:
 
 ```
 nav {
@@ -356,7 +423,7 @@ Now, the layout is set, and we still have full use of padding, margins, and othe
 
 **Step 5: Establish tolerances and fallbacks**
 
-Although we won't implement Step 5 here, the final step is to experiment to see when your layout breaks. This layout probably fails-- i.e. does something weird-- if there are 10 menu items, or if the screen is 320 pixels wide. All layouts _will_ break under some circumstances, and so the last step is to take some time to try to find out what those circumstances are. If any of them are realistic, how will you handle them?
+All layouts _will_ break under some circumstances, and so the last step is to take some time to try to find out what those circumstances are. If any of them are realistic, how will you handle them? Although we won't implement Step 5 here, the final step is to experiment to see how your layout breaks. This layout probably fails-- i.e. does something weird-- if there are 10 menu items, or if the screen is 320 pixels wide.
 
 * Ask Flexbox to `flex-wrap` your content in a reasonable way?
 * Use `overflow: hidden` or `overflow: scroll`?
@@ -366,11 +433,13 @@ Although we won't implement Step 5 here, the final step is to experiment to see 
 
 ### Card Gallery
 
+https://garrettgsb.github.io/w8d4-design-with-flexbox/cards/cards.html
+
 In this section, we will talk about **building a reusable component using Flexbox**. This approach could lend itself well to being used in conjunction with **React components** or **EJS/ERB partials**, but we can just think of it just in terms of vanilla HTML/CSS here.
 
-#### Part 1: Creating the card
+### Part 1: Creating the card
 
-We fill follow the same steps as before:
+We will follow the same steps as before:
   * Define the content
   * Design the layout natively
   * Consider the dynamic behavior of the layout
@@ -389,7 +458,7 @@ This could just be each content item stacked up on top of the next.
 
 **Step 3: Consider the dynamic behavior of the layout**
 
-This design only has four lines of text. What happens if it contains, say, 200 lines of text? One option is to give it a `max-height`, and then set the `overflow-y` to `scroll`.
+This design only has four lines of text. What happens if the card were to contain, say, 200 lines of text? One option is to give it a `max-height`, and then set the `overflow-y` to `scroll`.
 
 **Step 4: Design the layout hierarchy**
 
@@ -426,7 +495,7 @@ With styling that looks like this (**Pro tip:** Cards should have a box shadow):
 
 We would like to see what happens if a card is very squished, or if it has a very large image. It would also be good to see what happens if the card contains a super long word that doesn't break.
 
-#### Part 2: Creating the Gallery
+### Part 2: Creating the Gallery
 
 With our cards in place, this part is quite easy, and we have many options. Making a wrapper with a class called `.card-gallery` makes it very straightforward to decide how the gallery behaves, just by simple flexbox configuration. A conventional row, which wraps when it gets full, could look like this:
 
@@ -444,7 +513,9 @@ A sidebar gallery would need only to set `flex-direction: column`. Other non-car
 
 ### Holy Grail Layout
 
-In the dark age of layouts by float, champions from every land would risk life and limb attempting a grand feat of cunning and strength long thought to be impossible: **The Holy Grail**. Poets dreamed of a layout in which left and right sidebars would flank a main content area; This vertical sandwich itself sandwiched horizontally by a header and a footer. One of the earliest artistic renditions of what such a webpage may look like was uncovered in one of the many sketchbooks of Leonardo da Vinci:
+https://garrettgsb.github.io/w8d4-design-with-flexbox/holy-grail/holy-grail.html
+
+In the dark age of layouts by float, champions from every land would risk life and limb attempting a grand feat of cunning and strength long thought to be impossible: **The Holy Grail**. Poets dreamed of a layout in which left and right sidebars would flank a main content area; This vertical sandwich would itself be sandwiched horizontally by a header and a footer. One of the earliest artistic renditions of such a webpage was uncovered in one of the many sketchbooks of Leonardo da Vinci:
 
 ![Holy Grail](readme-images/holy-grail.jpg)
 
@@ -480,7 +551,7 @@ The center bit should grow arbitrarily with the content. The sidebars should rem
 
 Here, we start breaking down each area into flexboxes.
 
-This layout is easy if we look at the layout hierarchy like this:
+This layout can be structured by looking at the layout hierarchy like this:
 
 ![Holy grail breakdown](readme-images/holy-grail-breakdown.jpg)
 
