@@ -290,7 +290,7 @@ Writing our markup in this way is clean. Each tag is meaningful, and is a natura
 
 ### Centered Max Width Content Area
 
-https://garrettgsb.github.io/w8d4-design-with-flexbox/centered-max-width.html
+https://garrettgsb.github.io/w8d4-design-with-flexbox/centered-max-width/centered-max-width.html
 
 If you routinely look at web pages on a large monitor, you may have noticed that most pages constrain their content area to a certain maximum size-- It doesn't just keep stretching and stretching ad infinitum. Reddit, for example, constrains the content area to a certain max width and centers it on the page:
 
